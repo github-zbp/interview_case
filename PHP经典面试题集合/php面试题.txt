@@ -1,0 +1,463 @@
+1. 用PHP打印出前一天的时间，打印格式是2007年5月10日 22:21:21
+2. PHP代码如下：
+$a="hello";
+$b=&$a;
+unset($b);
+$b="world";
+echo $a;
+其结果是？
+3. PHP代码如下：
+$str="cd";
+$$str="landog";
+$$str.="ok";
+echo $cd;
+其结果是？
+4. 用PHP写一段代码，实现不使用第3个变量，交换$a、$b的值，$a、$b的初始值自己定。
+5. 根据题目要求，用PHP写出代码。
+表名User
+ID Name   Tel         Content   Date
+1   张三 13333663366 大专毕业 2006-10-11
+3   张三 13612312331 本科毕业 2006-10-15
+5   张四 020-5566556 中专毕业 2006-10-15
+4   王五 13521212125 大专毕业   2006-12-25
+2   …………
+6   …………
+假设数据库连接如下：
+$mysql_db=mysql_connect("local","root","pass");
+@mysql_select_db("DB",$mysql_db);
+(1)查询出所有Name等于“张三”的记录，并输出。
+(2)按ID升序查询，只返回排序后的前3条记录，并输出。
+6. javascript能否定义二维数组，如果不能你如何解决？
+7. 假设a.html和b.html在同一个文件夹下面，用javascript实现当打开a.html五秒钟后，自动跳转到b.html。
+8. 有两个文件a.html和a.php，代码如下：
+a.html
+<html>
+<head>
+<meta http-equiv=Content-Type content=text/html;charset=utf-8>
+<title>PHP程序员面试</title>
+</head>
+<body>
+<center>
+   <form method="post" action="a.php">
+    <table border="1">
+     <tr>
+      <td align="right">姓名：</td>
+      <td align="left"><input type="text" ></td>
+     </tr>
+     <tr>
+      <td align="right">电话：</td>
+      <td align="left"><input type="text" ></td>
+     </tr>
+     <tr>
+      <td align="right">邮箱：</td>
+      <td align="left"><input type="text" ></td>
+     </tr>
+     <tr>
+      <td align="right">地址：</td>
+      <td align="left"><input type="text" ></td>
+     </tr>
+     <tr>
+      <td align="center" colspan="2">
+       <input type="submit" value="提交">
+       <input type="reset" value="重填">
+      </td>
+     </tr>
+    </table>
+   </form>
+</center>
+</body>
+</html>
+
+a. php
+<?php
+     $user_name = $_GET['user_name'];
+     $user_tel = $_GET['user_tel'];
+     $user_email = $_GET['user_email'];
+     $user_add = $_GET['user_add'];
+     echo "用户名：$user_name<br>电话：$user_tel<br>邮箱：$user_email<br>地址：$user_add<br>";
+?>
+
+(1)请画出a.html在浏览器的显示效果图。
+(2)在a.html中输入：用户名=张三，电话=020-38259977，邮箱=sunrising@srtek.cn，地址=广州升瑞，按提交按钮后输出结果是？
+9. 你是否使用过版本控制工具，如果有，请简要说明。
+10. 利用CSS样式表定义已访问的超链接字体大小为14pt,颜色为red。
+11. 移动任意一位数或符号，使等式成立, 102 = 101-1。注：是移动不是交换，等号不能分开。
+12. 规律题，3、1、4、1、5、9、2、( ), 请按照规律在括号内写出下一表达式。
+13. 规律题，5、8、-3、5、-2、3、-1、( )，请按照规律在括号内写出下一表达式。
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+答案：
+1. echo date('Y-m-d H:i:s', strtotime('-1 day'));
+2. hello
+3. landogok
+4. $a = "abcd";
+$b = "1234";
+echo "初始化时 a=$a,b=$b<br>";
+$a = $a . $b;
+$b = strlen( $b );
+$b = substr( $a, 0, (strlen($a) - $b ) );
+$a = substr( $a, strlen($b) );
+echo "交换后 a=$a,b=$b<br>";
+5. （1）$sql = “select * from User where name='张三';
+$result = mysql_query( $sql );
+while( $row = mysql_fetch_array( $result, MYSQL_ASSOC ) ){
+   echo $row[‘Name’];
+}
+(2) $sql = “select * from User order by ID asc limit 0,3”;
+$result = mysql_query( $sql );
+while( $row = mysql_fetch_array( $result, MYSQL_ASSOC ) ){
+   echo $row[‘Name’];
+}
+6. javascript不支持二维数组定义，可以用arr[0] = new array()来解决
+7. javascript代码如下：
+<script>
+function go2b(){
+window.location = "b.html";
+window.close();
+}
+setTimeout( "go2b()",5000 ); //5秒钟后自动执行go2b()
+</script>
+8.
+（1）如下所示：
+      略。因为懒得插入图片，如果想看结果可以把代码保存为html文件，再用浏览器打开查看。
+（2）输出结果应为：
+      姓名：
+      电话：
+      邮箱：
+      地址：
+因为表单是用post方式提交，但在a.php中却用get方式来读取，所以不会读到任何值。
+9. 略
+10.   a:visited { font-size: 14pt; color: red; }
+11. 102 = 101-1
+12. 答案为6，因为∏=3.1415926
+13. 答案为2，规律为n=(n-2) – |(n-1)| ,n>=3
+
+[转载] 初级PHP程序员笔试题（给某搜索引擎公司出的）
+题目是2007年初我帮一个朋友的搜索引擎公司招聘PHP程序员时候出的，所以有一些搜索引擎的简单知识，今天发来给大家看看，增长点知识好了，题目简单，是面向初级程序员的
+
+，大家随便看看，呵呵。
+
+初级PHP程序员笔试题
+答题时间：60 – 90分钟
+
+
+一、基础及程序题（建议使用你擅长的语言：C/C++、PHP、Java）
+
+1.写一个排序算法，可以是冒泡排序或者是快速排序，假设待排序对象是一个维数组。（提示：不能使用系统已有函数，另外请仔细回忆以前学习过的基础知识）
+
+2.实现一个字符串截取的函数，类似于substr，必须能够截取中文这种多字节编码。假设每个中文也是一个字符，普通的数字、符号、字母也是一个字符。（提示：GB编码的中文
+
+字符高位范围是 0x81-0xFE ）
+
+3.写一个遍历指定目录下所有子目录和子文件的函数（提示：可以使用递归的方法）
+
+4.写出匹配邮箱地址和URL的两个正则表达式。类似下面的：
+邮箱地址：user_name.first@example.com.cn
+URL地址：http://www.example.com.cn/user_profile.php?uid=100
+（提示：使用标准的正则表达式，就是PHP中preg_* 类的正则处理函数能够解析的正则）
+
+
+二、数据库技术题
+
+1.写出三种以上MySQL数据库存储引擎的名称（提示：不区分大小写）
+
+2.说出你所知道的三种以上开源数据库的名称（提示：想想目前国外流行的开源数据库）
+
+3.MySQL数据库中的字段类型varchar和char的主要区别是什么？那种字段的查找效率要高，为什么?
+
+4.说出MySQL 4.0和MySQL 4.1版本的最主要的两个区别。如果你使用过MySQL 5，请说说MySQL 5跟MySQL 4的主要区别。（后半题选作）
+
+5.MySQL数据库基本的三个优化法则是什么？（提示：从服务配置、应用、开发角度考虑）
+
+三、综合技术题
+
+1.请使用JavaScript写出三种产生一个Image 标签的方法（提示：从方法、对象、HTML角度考虑）
+
+2.请使用CSS样式，描述两种方法在当前列中只显示一个div对象
+
+3.请描述出两点以上XHTML和HTML最显著的区别
+
+4.出五种以上你使用过的PHP的扩展的名称（提示：常用的PHP扩展）
+
+5.了解MVC模式吗？请写出三种以上目前PHP流行的MVC框架名称（不区分大小写）
+
+6.写出15个以上你所知道的常用的Linux命令和它的功能
+
+7.使用过Vim编辑器吗？如果使用过，如何在vim里切分多个可视化窗口，包括横排和纵排。（本题选作）
+
+8.说说Linux下的find命令和grep命令的区别（本题选作）
+
+9.请描述出七层网络模型的名称，由下到上（可以使用中文描述）
+
+10.说说下面这些这些协议的全称和中文解释（提示：都是工作在应用层）SMTP、POP3、HTTP、FTP、DNS
+
+11.使用过Memcache缓存吗，如果使用过，能够简单的描述一下它的工作原理吗？（本题选作）
+
+12.请大致的说说Session的工作原理。（提示：与Cookie有相应的关系）
+
+13.说说你所了解的搜索引擎包含那些技术？（本题选作）
+
+
+四、项目及设计题
+
+1.一个Web开发团队开发中，大致说说你所了解的所有成员的分工合作情况
+
+2.说说你做过的最得意的项目或者个人开发作品（可以是个人作品，也可以是合作项目）
+
+3.假设给你5台服务器，请大致的描述一下，如何使用你所熟悉的开源软件，搭建一个日PV 300万左右的中型网站
+
+
+PHP程序员笔试题 (参考答案)
+
+
+五、基础及程序题（建议使用你擅长的语言：C/C++、PHP、Java）
+
+5.写一个排序算法，可以是冒泡排序或者是快速排序，假设待排序对象是一个维数组。（提示：不能使用系统已有函数，另外请仔细回忆以前学习过的基础知识）
+
+//冒泡排序（数组排序）
+function bubble_sort($array)
+{
+$count = count($array);
+if ($count <= 0) return false;
+
+for($i=0; $i<$count; $i++){
+       for($j=$count-1; $j>$i; $j--){
+         if ($array[$j] < $array[$j-1]){
+            $tmp = $array[$j];
+            $array[$j] = $array[$j-1];
+            $array[$j-1] = $tmp;
+         }
+       }
+}
+return $array;
+}
+
+//快速排序（数组排序）
+function quicksort($array) {
+if (count($array) <= 1) return $array;
+
+$key = $array[0];
+$left_arr = array();
+$right_arr = array();
+
+for ($i=1; $i<count($array); $i++){
+       if ($array[$i] <= $key)
+         $left_arr[] = $array[$i];
+       else
+         $right_arr[] = $array[$i];
+}
+
+$left_arr = quicksort($left_arr);
+$right_arr = quicksort($right_arr);
+
+return array_merge($left_arr, array($key), $right_arr);
+}
+
+6.实现一个字符串截取的函数，类似于substr，必须能够截取中文这种多字节编码。假设每个中文也是一个字符，普通的数字、符号、字母也是一个字符。（提示：GB编码的中文
+
+字符高位范围是 0x81-0xFE ）
+
+/**
+* 截取字符串子串 （1）(GBK)
+*
+* @param string $str 原始字符串
+* @param int $len 需要截取字符串的长度
+* @return string 返回截取到的字符串
+*/
+function GBSubstr($str, $len){
+$count = 0;
+for($i=0; $i<strlen($str); $i++){
+if($count == $len) break;
+if(preg_match("/[\x80-\xff]/", substr($str, $i, 1))) ++$i;
+++$count;      
+}
+return substr($str, 0, $i);
+}
+
+
+/**
+* 截取字符串子串函数（2）（GB)
+*
+* @param string $src 源字符串
+* @param int $start 开始截取的位置
+* @param int $length 需要截取字符串的长度
+* @return string 返回截取的字符串
+*/
+
+function GBSubstr2($src, $start=0, $length=0){
+$suffix="";
+$len = strlen($src);
+if ( $len <= $length ) return $src;
+
+$cut_length = 0;
+for( $idx = 0; $idx<$length; $idx++){
+$char_value = ord($src[$idx]);
+if ( $char_value < 0x80 || ( $char_value & 0x40 ) )
+$cut_length++;
+else
+$cut_length = $cut_length + 3;
+}
+$curstr = substr($src, 0, $cut_length) ;
+preg_match('/^([\x00-\x7f]|.{3})*/', $curstr, $result);
+return   $result[0];
+}
+
+
+/**
+* 中文字符串截取（3）（支持GB2312/GBK/UTF-8/BIG5）
+*
+* @param string $str 要截取的字串
+* @param int $start 截取起始位置
+* @param int $length 截取长度
+* @param string $charset 字符串的字符集，包括有 utf-8|gb2312|gbk|big5 编码
+* @param bool $suffix 是否加尾缀
+* @return string 返回接续字符串的结果
+*/
+function CSubstr($str, $start=0, $length, $charset="gbk", $suffix=false){
+if(function_exists("mb_substr")){
+return mb_substr($str, $start, $length, $charset);
+}
+$re['utf-8'] = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
+$re['gb2312'] = "/[\x01-\x7f]|[\xb0-\xf7][\xa0-\xfe]/";
+$re['gbk'] = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
+$re['big5'] = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
+
+preg_match_all($re[$charset], $str, $match);
+$slice = join("", array_slice($match[0], $start, $length));
+
+if($suffix) {
+return $slice ."…";
+}
+return $slice;
+}
+
+
+7.写一个遍历指定目录下所有子目录和子文件的函数（提示：可以使用递归的方法）
+/**
+* 递归的遍历一个指定目录
+*/
+function dir_all ( $path ) {
+$handler = opendir($path);
+while (false!==($tmp = readdir($handler))) {
+if(is_dir( "$path/$tmp" )) {
+if ($tmp=="." | $tmp=="..") continue;
+echo $tmp."<br>\n";
+dir_all ("$path/$tmp");
+} else {
+echo $tmp ."<br>\n";
+}
+}
+}
+
+
+8.写出匹配邮箱地址和URL的两个正则表达式。类似下面的：
+邮箱地址：user_name.first@example.com.cn
+URL地址：http://www.example.com.cn/user_profile.php?uid=100
+（提示：使用标准的正则表达式，就是PHP中preg_* 类的正则处理函数能够解析的正则）
+
+邮箱：/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/
+URL：/^http:\/\/[\w]+\.[\w]+[\S]*/
+
+六、数据库技术题
+
+6.写出三种以上MySQL数据库存储引擎的名称（提示：不区分大小写）
+MyISAM、InnoDB、BDB（Berkeley DB）、Merge、Memory（Heap）、Example、Federated、Archive、CSV、Blackhole、MaxDB 等等十几个引擎
+
+7.说出你所知道的三种以上开源数据库的名称（提示：想想目前国外流行的开源数据库）
+MySQL、SQLite、BDB（Berkeley DB）、PostgreSQL、Firebird
+
+8.MySQL数据库中的字段类型varchar和char的主要区别是什么？那种字段的查找效率要高，为什么?
+Varchar是变长，节省存储空间，char是固定长度。查找效率要char型快，因为varchar是非定长，必须先查找长度，然后进行数据的提取，比char定长类型多了一个步骤，所以效
+
+率低一些
+
+9.说出MySQL 4.0和MySQL 4.1版本的最主要的两个区别。如果你使用过MySQL 5，请说说MySQL 5跟MySQL 4的主要区别。（后半题选作）
+
+MySQL 4.1 主要是比MySQL 4.0多了子查询和字符编码的支持两个特点。
+MySQL5增加的功能比MySQL4要更多，包括存储过程、视图、事务等等
+
+10.MySQL数据库基本的三个优化法则是什么，除了增加硬件和带宽？（提示：从服务配置、应用、开发角度考虑）
+（1）系统服务优化，把MySQL的key_buffer、cache_buffer、query_cache等增加容量
+（2）给所有经常查询的字段增加适当的索引
+（3）优化SQL语句，减少Ditinct、Group、Join等等语句的操作
+
+七、综合技术题
+
+14.请使用JavaScript写出三种产生一个Image 标签的方法（提示：从方法、对象、HTML角度考虑）
+
+(1)var img = new Image();
+(2)var img = document.createElementById(“image”)
+(3)img.innerHTML = “<img src=”xxx.jpg” />”
+
+15.请使用CSS样式，描述两种方法在当前列中只显示一个div对象
+(1)<div style=”width:19999px;”></div>
+(2)<div style=”clear:both;”></div>
+
+16.请描述出两点以上XHTML和HTML最显著的区别
+(1)XHTML必须强制指定文档类型DocType，HTML不需要
+(2)XHTML所有标签必须闭合，HTML比较随意
+
+17.出五种以上你使用过的PHP的扩展的名称（提示：常用的PHP扩展）
+MB_Sring、Iconv、Curl、GD、SHM、libxml、socket、MySQL、PDO 等等
+
+18.了解MVC模式吗？请写出三种以上目前PHP流行的MVC框架名称（不区分大小写）
+FleaPHP、Zend Framework、CakePHP、Symfony、Plite、php.MVC、PHP on Trax、Smutty 等等
+
+19.写出10个以上你所知道的常用的Linux命令和它的功能
+Ls 列目录
+Cp 复制
+Rm 删除
+Mkdir 建立目录
+Cd   切换目录
+Ps   查看进程
+Top 查看机器使用情况
+
+
+20.使用过Vim编辑器吗？如果使用过，如何在vim里切分多个可视化窗口，包括横排和纵排。（本题选作）
+横：split（sp）
+纵：vsplit（vsp）
+
+21.说说Linux下的find命令和grep命令的区别（本题选作）
+Find：按照文件名查找
+Grep：按照文件内容查找
+
+22.请描述出OSI七层网络模型的名称，由下到上（可以使用中文描述）
+物理层、数据链路层、网络层、传输层、会话层、表示层、应用层
+
+23.说说下面这些这些协议的全称和中文解释（提示：都是工作在应用层）
+SMTP、POP3、HTTP、FTP、DNS
+
+SMTP (Simple Mail Transfer Protocol) 简单邮件传输协议
+POP3 (Post Office Protocol 3) 邮局协议第3版
+HTTP (Hypertext Transfer Protocol) 超文本传输协议
+FTP   (File Transfer Protocol）文件传输协议
+DNS   (Domain Name System and Domain Name Service protocol) 域名系统（服务）协议
+
+
+24.使用过Memcache缓存吗，如果使用过，能够简单的描述一下它的工作原理吗？（本题选作）
+
+Memcahce是把所有的数据保存在内存当中，采用hash表的方式，每条数据又key和value组成，每个key是独一无二的，当要访问某个值的时候先按照找到值，然后返回结果。
+
+Memcahce采用LRU算法来逐渐把过期数据清除掉。
+
+25.请大致的说说Session的工作原理。（提示：与Cookie有相应的关系）
+
+参考这里：http://www.yuanma.org/data/2006/1128/article_1872.htm
+
+26.说说你所了解的搜索引擎包含那些技术？（本题选作）
+
+爬虫（采集）、切词（分词）、索引（存储）、查询以及其他相关技术
+
+
+八、项目及设计题
+
+4.一个Web开发团队开发中，大致说说你所了解的所有成员的分工合作情况
+
+
+PS: 自行判定
+
+
+5.说说你做过的最得意的项目或者个人开发作品（可以是个人作品，也可以是合作项目）
+
+PS: 自行判定
+
+6.假设给你5台服务器，请大致的描述一下，如何使用你所熟悉的开源软件，搭建一个日PV 300万左右的中型网站

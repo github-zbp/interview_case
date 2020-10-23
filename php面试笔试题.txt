@@ -1,0 +1,308 @@
+PHP基础：
+
+1.引用变量
+
+2.单双引号的区别
+
+3.定义字符串的几种方式
+单引号 双引号 定界符
+定界符包括 heredoc和nowdoc
+
+heredoc:相当于使用双引号
+<<<"AOF"
+...
+AOF;
+
+nowdoc:相当于使用单引号
+<<<'AOF'
+
+AOF;
+
+定界符之后必须不能有任何字符【特别是空格字符有时会没注意到】，否则将会出错。
+
+
+4.超全局变量有哪几种和$_SERVER常见的下标有哪几种
+PATH_INFO  uri中不含?参数的部分
+QUERY_STRING  uri中?参数部分
+REQUEST_URI 完整的uri，不含域名，PAHT_INFO+QUERY_STRING
+
+5.定义常量的方式有几种，区别是什么
+<?php 
+    define("NAME","zbp");
+    const NAME="zbp";
+    echo NAME;
+?>
+
+6.@的作用
+屏蔽warning级别以下的错误，包括warning
+
+7.遍历数组的几种方式和他们的区别
+for 不能遍历关联数组
+foreach 可以遍历关联数组和索引数组
+结合list(),each()和while   遍历完毕后无法重置指针
+结合next(),prev(),current(),key(),end(),reset()和while遍历
+
+<?php 
+    $arr=[1,2,3,4,5,"hello"=>"zbp"];
+    reset($arr);
+    do{
+        $key=key($arr);
+        $value = current($arr);
+        echo $key.":".$value."<br/>";
+    }while(next($arr));
+    
+?>
+
+8.函数作用域和静态遍历static
+global关键字
+引用传参&
+
+9.include和require的区别
+没找到文件会报什么错误会不会终止运行，引入的文件中有错误又会报什么错误，是否会终止运行。
+顺便答以下 require_once和include_once 即使没有问到
+
+10.print()、echo、print_r()、var_dump()等区别
+print()、echo 都是语言结构
+两者都只能打印字符串或数字等变量变量，不能答应数组或者对象或者资源标识符，不同的是前者打印只能接受一个变量，后者可以输出多个。
+
+print_r()和var_dump()都是函数。
+两者都可以打印任何变量，但是后者还会打印变量类型，前者不可以。后者更适合调试的时候使用
+
+11.正则，正则切割，正则替换，中文的正则
+中文的正则：(仅适用于utf-8)
+/[\x{4e00}-\x{9fa5}]+/u
+
+12.文件操作
+例如：写一个脚本，每次执行都可以在开头加一个hello字符串
+<?php 
+    $path="./a.txt";
+    $fp = fopen($path,"r");
+    $content = fread($fp,filesize($path)+1);
+    fclose($fp);
+    echo $content;
+    $content = "hello".$content;
+    $fp=fopen($path,"w");
+    fwrite($fp,$content);
+    fclose($fp);
+?>
+
+打开模式
+$fp=fopen("test.txt","r");
+//以只读方式打开文件，将文件指针指向文件头
+$fp=fopen("test.txt","r+");
+//以读写方式打开文件，将文件指针指向文件头
+$fp=fopen("test.txt","w");
+//写入方式打开，将文件指针指向文件头并将文件大小截为零。如果文件不存在则尝试创建
+$fp=fopen("test.txt","w+");
+//以读写方式打开，将文件指针指向文件头并将文件大小截为零。如果文件不存在则尝试创建
+$fp=fopen("test.txt","a");
+//以写入方式打开，将文件指针指向文件末尾。如果文件不存在则尝试创建
+$fp=fopen("test.txt","a+");
+//以读写方式打开，将文件指针指向文件末尾。如果文件不存在则尝试创建
+$fp=fopen("test.txt","wb+");
+//以写入方式打开二进制文件，将文件指针指向文件头并将文件大小截为零。如果文件不存在则尝试创建
+$fp=fopen("c: est est.txt","r");
+//在windows平台上，要转义文件路径中的每个反斜线，或者用斜线
+$fp=fopen("http://www.domain.com/","r");
+//以只读方式打开web地址?
+$fp=fopen("ftp://username:password@domain.com/test.txt","r");
+//与ftp服务器连接，以username和password登录服务器?
+
+r+写读方式，将文件指针指向文件头，这意味着如果要写入数据，写入的数据会覆盖原有数据。
+如原有数据abc，写入数据ef，写入之后内容变为：
+efc
+
+
+再出一题，遍历一个目录
+<?php 
+    $dir="./wampthemes";
+    
+    function loopDir($dirName,$tag="|",$firstDir=true){
+        $tag.="-";
+        $dirName = rtrim($dirName,"/")."/";
+        $dh = opendir($dirName);
+        
+        while(($f = readdir($dh))!==false){
+            if("."==$f || ".."==$f){
+                continue;
+            }
+            
+            $fp = $dirName.$f;
+            echo $tag.$f."<br/>";
+            if(is_dir($fp)){
+                loopDir($fp,$tag,false);
+            }
+            
+            if($firstDir){
+                echo "<br/>";
+            }    
+        }
+        
+        closedir($dh);
+        
+    }
+    
+    loopDir($dir);
+?>
+
+13.cookie和session是什么，他们的区别
+cookie和session是一种会话控制技术，当我们浏览网页的时候，网页是一种无状态的连接，无法得知用户的浏览状态。通过cookie和session可以记录用户的信息，再下一次访问页面的时候，页面会根据用户身份显示相应的内容。
+
+
+Session机制：session内容一般以文件的形式存储于服务器中，文件名是sess_"session_id"。而本地浏览器会存储一个与服务器中session文件对应的Cookie值，Cookie存储的是键值为“PHPSESSID”，值为session_id。
+
+用户在访问web应用时，web应用的所有页面都可以通过cookie获取到这个SESSION_ID值，再通过session_id获取服务器中存储的session值，当用户关闭浏览器后，cookie存储的session_id自动清除，而服务器存储的session文件也会在30分钟后自动清除。
+
+所以session的生命周期在浏览器关闭时结束。
+
+
+区别：
+存储位置：Cookie存储在客户端浏览器中，相对不安全；Session内容所在文件存储在服务器中，一般在根目录下的tmp文件夹中，相对更安全。
+
+数量和大小限制：Cookie存储的数据在不同的浏览器会有不同的限制，一般在同一个域名下，Cookie变量数量控制在20个以内，每个cookie值的大小控制在4kb以内。session值没有大小和数量限制，但如果数量过多，会增大服务器的压力。
+
+内容区别：cookie保存的内容是字符串，而服务器中的session保存的数据是对象（经过序列化的对象，不过存在文件中的内容还是字符串）。
+
+路径区别：session不能区分路径，同一个用户在访问一个网站期间，所有的session在任何一个地方都可以访问到；而cookie中如果设置了路径参数，那么同一个网站中不同路径下的cookie互相是访问不到的。
+
+cookie和session的优缺点。
+
+14.session和cookie的其他注意点：
+a. cookie如何存数组：
+setcookie("a[b]","val");
+echo $_COOKIE['a']['b'];
+
+setcookie的第二参是不能传数组的，只能传字符串。
+
+b.使用session，关闭浏览器后，记录session_id的cookie会消失，但是session文件还要过30分钟才删除，但是由于记录session_id的cookie消失了，所以这个session相当于失效了。
+
+b.如果禁用cookie，如何使用session
+禁用cookie后，给$_SESSION['key']赋值时，session文件依旧会生成，但由于cookie不保存session_id，所以浏览器找不到对于的session，因而session失效。
+
+可以通过在url中传session_id，并在跳转的页面中接收传过来的session_id，通过将这个session_id传给session_id()函数告诉服务器应该找那个session文件。
+
+涉及到的函数：
+session_name() 返回传递session_id的键名，默认为PHPSESSID
+session_id()   获取或者设置session_id
+
+实现如下：a跳转到b，a定义session，b显示session值
+a.php 
+<?php 
+    session_start();
+    $_SESSION['user']="zbp"; 
+    echo '<a href="/b.php?'.session_name().'='.session_id().'">链接</a>'
+?> 
+
+b.php 
+<?php 
+    session_id($_GET[session_name()]);  # 设置session_id
+    session_start();
+    echo $_SESSION['user'];
+?>   
+
+这样的话跳转到其他页面都要在url后面加上一个session_name().'='.session_id()才行，session_id()返回的值都是同一个值
+
+
+
+如果不希望每次跳转都手动加session_id可以这样
+修改php.ini
+session.use_only_cookies=0
+session.use_trans_sid=1 
+
+a.php 
+<?php 
+    session_start();
+    $_SESSION['user']="zbp"; 
+    echo '<a href="/b.php">链接</a>'
+?> 
+
+b.php 
+<?php 
+    session_start();
+    echo $_SESSION['user'];
+?>   
+
+当点击链接时系统会自动在url后加上?PHPSESSID=xxx。在b中也无需调用session_id()
+
+15.$_GET和$_POST的区别
+get通过url拼接传递参数，url参数可见；post通过请求body体传递，url参数不可见。
+get请求是可以缓存的，post请求不可以缓存。
+get请求页面后退不产生影响，post请求页面后退会重新提交。
+get一般传输数据大小不超过2K~4K，post请求传输数据的大小根据php.ini 配置文件设定。
+get请求将header和data一起发送，服务器响应200则返回数据。post请求浏览器先发送header，服务器响应100，浏览器再发送data，服务器响应200则返回数据。
+
+16.垃圾回收机制
+要先从php内存管理说起，php的内存管理的核心是引用计数和写时拷贝。
+当定义一个变量并且给这个变量赋值的时候，php底层会创建一个zval的结构体和zend_value的联合体。
+
+在zval结构体中会记录这个变量的变量名，类型以及指向哪个zend_value。
+在zend_value中会记录变量的具体的值以及引用次数。
+
+例如：
+$a = 'hello'. mt_rand( 1, 1000 );
+
+此时的zval和zend_value为：
+zval {
+
+string "a" //变量的名字是a
+
+value zend_value //变量的值
+
+type string //变量是字符串类型
+
+}
+
+zend_value {
+
+string "hello916" //值的内容
+
+refcount 1 //引用计数
+
+}
+
+所以zval存的是变量的名字，相当于是一个key的存在。而zend_value存的是变量的值
+
+我们可以通过
+echo xdebug_debug_zval( 'a');   #(refcount=1, is_ref=0)string 'hello916' (length=8)
+来查看变量a的引用次数refcount，以及$a是否是引用变量。
+
+如果我们将一个变量赋给另外一个变量：
+$b=$a;
+
+那么此时会多创建一个变量b的 zval结构体，但是不会创建多一个zend_value联合体，而是将b的zval也指向$a的zend_value。也就是说，$a和$b指向同一块内存。这样的好处是节约内存。
+而此时zend_value的引用次数变为 2，这就是引用计数。
+
+zend_value {
+
+string "hello916" //值的内容
+
+refcount 2 //引用计数
+
+}
+
+这是因为$a和$b的zval都引用了同一个zend_value。
+
+当$b的值改变的时候，由于一个zend_value不会保持两个值，因此会多创建一个zend_value，并将$b的zval指向该zend_value。此时$a和$b就各自使用一块内存。这个就叫做写时拷贝。
+
+
+而内存的回收也是通过查看zend_value中的refcount是否为0。
+$a=1;   # 此时 refcount 为1
+unset($a);  # 此时$a的z_val结构体被干掉，同时zend_value中的refcount变为0，因此这个zend_value就会被干掉。
+
+再看一个例子
+$a=1;   
+$a=2;
+
+$a=1时，会生成一个z_val结构体和zend_value联合体里面保存着变量值1。
+$a=2时，会先开一块内存然后将zval指向这个内存，再把原来的内存干掉。
+
+PHP面向对象
+16.
+
+PHP算法
+
+Mysql考点
+
+redis考点
+
+

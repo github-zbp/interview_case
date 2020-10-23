@@ -1,0 +1,179 @@
+某大公司的PHP面试题
+
+管理提醒: 本帖被 haowubai 执行取消置顶操作(2009-07-30) 
+1. 如何用php的环境变量得到一个网页地址的内容？ip地址又要怎样得到？
+[php]
+echo $_SERVER ['PHP_SELF'];
+echo $_SERVER ['SERVER_ADDR'];
+[/php]
+
+
+2. 求两个日期的差数，例如2007-2-5 ~ 2007-3-6 的日期差数
+[php]
+$begin=strtotime('2007-2-5');
+$end=strtotime('2007-3-6');
+echo ($end-$begin)/(24*3600);
+[/php]
+
+
+3. 请写一个函数，实现以下功能：
+字符串“open_door” 转换成 “OpenDoor”、”make_by_id” 转换成 ”MakeById”。
+[php]
+function changeStyle(& $str) {
+
+/*$str = str_replace ( "_", " ", $str );
+$str = ucwords ( $str );
+$str = str_replace ( " ", "", $str );
+return $str;*/
+
+$arrStr=explode('_',$str);
+foreach($arrStr as $key=>$value){
+  $arrStr[$key]=strtoupper(substr($value,0,1)).substr($value,1);
+}
+return implode('',$arrStr);
+}
+$s = "open_door";
+echo changeStyle ( $s );
+[/php]
+
+4. 要求写一段程序，实现以下数组$arr1转换成数组$arr2：
+[php]$arr1 = array (
+'0' => array ('fid' => 1, 'tid' => 1, 'name' =>'Name1' ),
+'1' => array ('fid' => 1, 'tid' => 2 , 'name' =>'Name2' ),
+'2' => array ('fid' => 1, 'tid' => 5 , 'name' =>'Name3' ),
+'3' => array ('fid' => 1, 'tid' => 7 , 'name' =>'Name4' ),
+'4' => array ('fid' => 3, 'tid' => 9, 'name' =>'Name5' ) 
+);
+$arr2 = array ( 
+'0' => array ( 
+'0' => array ( 'tid' => 1, 'name' => 'Name1'),
+'1' => array ( 'tid' => 2, 'name' => 'Name2'),
+'2' => array ( 'tid' => 5, 'name' => 'Name3'),
+'3' => array ( 'tid' => 7, 'name' => 'Name4')
+),
+'1' => array ( 
+'0' => array ( 'tid' => 9, 'name' => 'Name5' ) 
+)
+);
+<?php
+$arr1 = array (
+'0' => array ('fid' => 1, 'tid' => 1, 'name' =>'Name1' ),
+'1' => array ('fid' => 1, 'tid' => 2 , 'name' =>'Name2' ),
+'2' => array ('fid' => 1, 'tid' => 5 , 'name' =>'Name3' ),
+'3' => array ('fid' => 1, 'tid' => 7 , 'name' =>'Name4' ),
+'4' => array ('fid' => 3, 'tid' => 9, 'name' =>'Name5' ) 
+);
+function changeArrayStyle($arr){
+foreach($arr as $key=>$value){
+  $result[$value['fid']][]=$value;
+}
+return array_values($result);
+}
+$arr2=changeArrayStyle($arr1);
+echo "<pre>";
+var_dump($arr2);
+[/php]
+
+5. 请简述数据库设计的范式及应用。
+一般第3范式就足以，用于表结构的优化，这样做既可以避免应用程序过于复杂同时也避免了SQL语句过于庞大所造成系统效率低下。
+ANSWER：
+第一范式：若关系模式R的每一个属性是不可再分解的，再属于第一范式。
+第二范式：若R属于第一范式，且所有的非码属性都完全函数依赖于码属性，则为第二范式。
+第三范式：若R属于第二范式，且所有的非码属性没有一个是传递函数依赖于候选码，则属于第三范式。
+6.一个表中的Id有多个记录，把所有这个id的记录查出来，并显示共有多少条记录数，用SQL语句及视图、存储过程分别实现。
+存储过程：
+[php]
+DELIMITER //
+create procedure proc_countNum(in columnId int,out rowsNo int)
+begin
+  select count(*) into rowsNo from member where member_id=columnId;    
+end
+call proc_countNum(1,@no);
+select @no;
+
+[/php]
+视图：
+create view v_countNum as select member_id,count(*) as countNum from member group by member_id
+select countNum from v_countNum where member_id=1
+7 表中有A B C三列,用SQL语句实现：当A列大于B列时选择A列否则选择B列，当B列大于C列时选择B列否则选择C列。
+[php]select
+case
+when first_name>middle_name then
+case when first_name>last_name then first_name
+else last_name end
+else
+case when middle_name>last_name then middle_name else last_name
+end
+end as name
+from member
+[/php]
+8请简述项目中优化sql语句执行效率的方法,从哪些方面,sql语句性能如何分析?
+ANSWER: sql优化有鸟用，不如直接加索引。
+9 如果模板是用smarty模板。怎样用section语句来显示一个名为$data的数组。比如：
+[php]$data = array(
+[0] => array( [id]=8 [name]=’name1′)
+[1] => array( [id]=10 [name]=’name2′)
+[2] => array( [id]=15 [name]=’name3′)
+……
+)[/php]
+写出在模板页的代码？ 若用foreach语句又要怎样显示呢？
+占无答案.
+10 写一个函数，能够遍历一个文件夹下的所有文件和子文件夹。（目录操作）
+[php] <?php
+$d = dir(dirname(__file__));
+//echo "Handle: " . $d->handle . "\n";
+//echo "Path: " . $d->path . "\n";
+while ( false !== ($entry = $d->read ()) ) {
+echo $entry . "<br />";
+}
+$d->close ();
+[/php]
+
+11 两张表 city表和province表。分别为城市与省份的关系表。
+city:
+id City Provinceid
+1 广州 1
+2 深圳 1
+3 惠州 1
+4 长沙 2
+5 武汉 3
+………. 广州
+province:
+id Province
+1 广东
+2 湖南
+3 湖北
+……….
+（1） 写一条sql语句关系两个表，实现：显示城市的基本信息。？
+（2） 显示字段：城市id ，城市名， 所属省份 。
+如：
+Id（城市id） Cityname(城市名) Privence(所属省份)
+。。。。。。。。。
+。。。。。。。。。
+（2）如果要统计每个省份有多少个城市，请用group by 查询出来。？
+显示字段：省份id ，省份名，包含多少个城市。
+ANSWER:
+1.select A.id,A.Cityname,B.Province from city A,province B where A.provinceid=B.id
+2.select B.id,B.Province,count(*) as num from city A,province B where A.provinceid=B.id group by B.id
+12. 按照你的经验请简述软件工程进行软件开发的步骤。以下工具Rational Rose、PowerDesigner、Project、VSS或CVS、TestDirector使用过那种,有缺点是什么？
+公司用dbdesigner及cvs,测试管理工具用的是Mantis
+13. 请简述操作系统的线程与进程的区别。列举LINUX下面你使用过的软件？
+14. 请使用伪语言结合数据结构冒泡排序法对以下一组数据进行排序 10 2 36 14 10 25 23 85 99 45。
+[php]function bubble_sort(& $arr){
+$number=count($arr);
+for($i=0;$i<$number-1;$i++){
+  for($j=0;$j<$number-1-$i;$j++){
+   if($arr[$j]>$arr[$j+1]){
+    $tmp=$arr[$j];
+    $arr[$j]=$arr[$j+1];
+    $arr[$j+1]=$tmp;
+   }
+  }
+} 
+}
+$str="10 2 36 14 10 25 23 85 99 45";
+$arr=explode(" ",$str);
+bubble_sort($arr);
+echo "<pre>";
+var_dump($arr);
+[/php] 

@@ -1,0 +1,123 @@
+Question 1
+
+What does <? echo count ("123") ?> print out?D
+
+A)    3
+
+B)    False
+
+C)    Null
+
+D)    1
+
+E)    0
+
+Question 2
+
+Which of the following snippets prints a representation of 42 with two decimal places?B
+
+A)    printf("%.2d\n", 42);
+
+B)    printf("%1.2f\n", 42);
+
+C)    printf("%1.2u\n", 42);
+
+Question 3
+
+Given
+     $text = 'Content-Type: text/xml';
+Which of the following prints 'text/xml'?C
+
+A)    print substr($text, strchr($text, ':'));
+
+B)    print substr($text, strchr($text, ':') + 1);
+
+C)    print substr($text, strpos($text, ':') + 1);
+
+D)    print substr($text, strpos($text, ':') + 2);
+
+E)    print substr($text, 0, strchr($text, ':')
+
+Question 4
+
+What is the value of $a?
+     <?php
+         $a = in_array('01', array('1')) == var_dump('01' == 1); A
+     ?>
+
+A)    True
+
+B)    False
+
+Question 5
+
+What is the value of $result in the following PHP code?
+     <?php
+         function timesTwo($int) {
+             $int = $int * 2;    
+         }
+         $int = 2;
+         $result = timesTwo($int);
+     ?>;
+
+Answer: NULL
+
+Question 6
+
+The code below ___________ because ____________.
+<?php
+     class Foo {
+     ?>
+     <?php
+            function bar() {
+                print "bar";
+            }
+     }
+?>
+
+A)    will work, class definitions can be split up into multiple PHP blocks.
+
+B)    will not work, class definitions must be in a single PHP block.
+
+C)    will not work, class definitions must be in a single file but can be in multiple PHP blocks.
+
+D)    will work, class definitions can be split up into multiple files and multiple PHP blocks.
+
+Question 7
+
+When turned on, ____________ will _________ your script with different variables from HTML forms and cookies.
+
+A)    show_errors, enable
+
+B)    show_errors, show
+
+C)    register_globals, enhance
+
+D)    register_globals, inject 
+
+Question 8
+
+What will be the output of the following PHP code:
+     <?php
+         echo count(strlen("http://php.net"));
+     ?>
+
+Answer: 1
+
+Question 9
+
+What is the best all-purpose way of comparing two strings?
+
+A)    Using the strpos function
+
+B)    Using the == operator
+
+C)    Using strcasecmp()
+
+D)    Using strcmp() 
+
+Question 10
+
+What is the difference between "print()" and "echo()"?
+
+Answer: print is a function,echo is a language construct

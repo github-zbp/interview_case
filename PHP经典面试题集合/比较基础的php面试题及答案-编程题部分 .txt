@@ -1,0 +1,56 @@
+比较基础的php面试题及答案-编程题部分 
+PHP面试题专栏 
+
+编程题:
+1. 写一个函数，尽可能高效的，从一个标准 url 里取出文件的扩展名
+例如: http://www.sina.com.cn/abc/de/fg.php?id=1 需要取出 php 或 .php
+答案1:
+function getExt($url){
+$arr = parse_url($url);
+
+$file = basename($arr['path']);
+$ext = explode(”.”,$file);
+return $ext[1];
+}
+答案2:
+function getExt($url) {
+$url = basename($url);
+$pos1 = strpos($url,”.”);
+$pos2 = strpos($url,”?”);
+if(strstr($url,”?”)){
+return substr($url,$pos1 + 1,$pos2 – $pos1 – 1);
+} else {
+return substr($url,$pos1);
+}
+}
+
+2. 在 HTML 语言中，页面头部的 meta 标记可以用来输出文件的编码格式，以下是一个标准的 meta 语句
+请使用 PHP 语言写一个函数，把一个标准 HTML 页面中的类似 meta 标记中的 charset 部分值改为 big5
+请注意:
+1. 需要处理完整的 html 页面，即不光此 meta 语句
+2. 忽略大小写
+3. ‘ 和 ” 在此处是可以互换的
+4. ‘Content-Type’ 两侧的引号是可以忽略的，但 ‘text/html; charset=gbk’ 两侧的不行
+5. 注意处理多余空格
+
+3. 写一个函数，算出两个文件的相对路径
+如 $a = ‘/a/b/c/d/e.php’;
+$b = ‘/a/b/12/34/c.php’;
+计算出 $b 相对于 $a 的相对路径应该是 ../../c/d将()添上
+答:function getRelativePath($a, $b) {
+$returnPath = array(dirname($b));
+$arrA = explode(’/', $a);
+$arrB = explode(’/', $returnPath[0]);
+for ($n = 1, $len = count($arrB); $n < $len; $n++) {
+if ($arrA[$n] != $arrB[$n]) {
+break;
+}
+}
+if ($len – $n > 0) {
+$returnPath = array_merge($returnPath, array_fill(1, $len – $n, ‘..’));
+}
+
+$returnPath = array_merge($returnPath, array_slice($arrA, $n));
+return implode(’/', $returnPath);
+}
+echo getRelativePath($a, $b);

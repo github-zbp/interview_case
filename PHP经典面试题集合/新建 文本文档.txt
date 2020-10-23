@@ -1,0 +1,160 @@
+1、COOKIE、SESSION的联系和区别，多台web服务器如何共享 SESSION？
+
+    使用session_start()调用session,服务器端在生成session文件的同时,生成session ID哈希值和默认值为PHPSESSID的session name,并向客户端发送变量为(默认的是)PHPSESSID(session name),值为一个128位的哈希值.服务器端将通过该cookie与客户端进行交互.
+    session变量的值经php内部系列化后保存在服务器机器上的文本文件中,和客户端的变量名默认情况下为PHPSESSID的coolie进行对应交互.
+      即服务器自动发送了http头:header('Set-Cookie: session_name()=session_id(); path=/');
+即setcookie(session_name(),session_id());
+    当从该页跳转到的新页面并调用session_start()后,PHP将检查与给定ID相关联的服务器端存贮的session数据,如果没找到,则新建一个数据集.
+
+   2、HTTP协议中的POST和GET有何区别？
+
+　　 其中请求方法是请求一定的Web页面的程序或用于特定的URL。可选用下列几种：
+　　GET： 请求指定的页面信息，并返回实体主体。
+　　HEAD： 只请求页面的首部。
+　　POST： 请求服务器接受所指定的文档作为对所标识的URI的新的从属实体。
+　　PUT： 从客户端向服务器传送的数据取代指定的文档的内容。
+　　DELETE： 请求服务器删除指定的页面。
+
+   3、一段php代码，写出输出结果，
+
+/**** 这个程序****/
+$a=0;
+$b=0;
+if(($a=3)>0 || ($b=3)>0){
+
+$a++;
+$b++;
+
+echo $a ;
+echo $b; //输出b的值
+}
+
+答案：4 1
+
+/**** 这个程序****/
+$a=0;
+$b=0;
+if(($a=3)>0 | ($b=3)>0){
+
+$a++;
+$b++;
+
+echo $a ;
+echo $b; //输出b的值
+}
+
+答案：4 4
+
+   4、reqiure的include都可包含文件，二者的区别何在？
+
+     5、php中WEB上传文件的原理是什么，如何限制上传文件的大小？
+
+1，上传文件的表单使用post方式（和get的区别不用说了）；还要加上enctype='multipart/form-data'。
+      2，一般要加上隐藏域：<input type=hidden name='MAX_FILE_SIZE' value=dddddd>，位置在file域前面。value的值是上传文件的客户端字节限制。据说可以减少文件超标时客户端的等待时间，不过我没觉得有什么区别。
+      3，出于安全考虑，file域是不许赋值的。随便在file域输入字符串，然后按submit也不会有反应。必须是第二个字符是冒号的时候（比如空格跟随冒号可以上传一个长度为0字节的“文件”），submit才同意“服务”——不过这个是客户端的措施，跟MAX_FILE_SIZE一样很容易绕过去。
+
+     限制上传文件大小的因素有
+      1，客户端的隐藏域MAX_FILE_SIZE的数值（可以被绕开）。
+      2，服务器端的upload_max_filesize，post_max_size和memory_limit。这几项不能够用脚本来设置。
+      3，自定义文件大小限制逻辑。即使服务器的限制是能自己决定，也会有需要个别考虑的情况。所以这个限制方式经常是必要的。
+      4，$_FILE['fn']['size']
+
+is_uploaded_file()    ,    move_uploaded_file()
+
+   6、写一个函数，可以遍历文件夹下的所有文件和文件夹。
+
+function myscandir($path)
+{
+    $files = array();
+    if($handle = opendir($path)){
+        while(($f = readdir($handle)) !== false){
+            $p = $path .'/'. $f;
+            if($f == '..' || $f == '.') continue;
+            if(is_file($p)){
+                $files[] = $f;
+            }elseif(is_dir($p)){
+                $files[$f] = myscandir($p);
+            }
+        }
+        closedir($handle);
+    }
+    return $files;   
+}
+
+//$f = myscandir('./misc/doo');
+//print_r($f);
+
+    7、8、中间有几个unix shell的题目（好像是两个），因为不懂，不记得这些题目了
+
+   9、有mail.log的一个文档，内容为若干邮件地址，其中用'\n'将邮件地址分隔。要求从中挑选出sina.com的邮件地址（包括从文件读取、过滤到列印出来）。
+
+mail.log内容如下：
+
+james@sina.com.cn
+
+jack@163.com
+
+zhansan@sohu.com
+
+lisi@hotmail.com
+
+wangwu@gmail.com
+
+答案：
+
+cat mail.log | grep sina.com
+
+或者：
+
+#!/bin/bash
+while read row ;
+do
+        case $row in
+                *sina.com*) echo $row ;;
+        esac
+done < mail.log
+
+10、js中网页前进和后退的代码
+
+<input type=button value=前进 onclick=history.go(1)>   
+<input type=button value=前进 onclick=history.forward()>       
+<input type=button value=后退 onclick=history.go(-1)>   
+<input type=button value=后退 onclick=history.back()>  
+
+11、window（A）中用window.open（）打开了window（B），如何从窗口B调用窗口A中的内容？A、B仅仅是窗口的代号，不是窗口名字
+
+window.opener.document.getElementById()
+
+12、了解ajax吗？用过吗？……
+
+var xmlhttp = new XMLHttpRequest();
+var xmlhttp = new ActiveXObject("Microsoft.XMLHttp");
+xmlhttp.open('get',url,true);
+xmlhttp.onreadystatechang=function(){
+    if(xmlhttp.readyState ==4){
+        if(xmlhttp.status==200){alert(xmlhttp.responseText);xmlhttp=null;}
+    }
+}
+xmlhttp.send(null);
+
+
+
+Ajax.open("POST",url,true);
+//如果是POST方式提交数据，下两行必不可少
+Ajax.setrequestheader("content-length",sendData.length);
+Ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+Ajax.send(sendData);// 要POST的数据
+
+13、什么是MVC？用过吗？使用时遇到了什么问题，怎么解决的？
+
+14.写出 访问 http://www.sina.com.cn 所需的报文头，嘿嘿，这是超级猪自己想起来地。
+答案：可以用get_heards(http://www.sina.com.cn)查看
+
+
+
+
+http://hi.baidu.com/linchaoqi/blog/item/6c148efdfef97d1f08244d1c.html
+这是这套面试的网址
+
+http://kcjun.5d6d.com/thread-367-1-1.html
+另外一套面试题网址

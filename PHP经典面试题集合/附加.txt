@@ -1,0 +1,39 @@
+附加:
+1.php如何跳转
+方法一：php函数跳转,缺点，header头之前不能有输出，跳转后的程序继续执行，可用exit中断执行后面的程序。
+Header("Location: 网址"); 	//直接跳转
+header("refresh:3;url=http://axgle.za.net");	//三秒后跳转
+
+方法二：利用meta 
+echo "<meta http-equiv=refresh content='0; url=网址'>"; 
+
+
+2.设置cookies  
+bool setcookie ( string name [, string value [, int expire [, string path [, string domain [, bool secure]]]]] )
+参数说明: Cookie 的名字，Cookie的值，过期时间，Cookie 在服务器端的有效路径，该 cookie 有效的域名，指明 cookie 是否仅通过安全的 HTTPS 连接传送。当设成 TRUE 时，cookie 仅在安全的连接中被设置。默认值为 FALSE
+$value = 'something from somewhere';
+setcookie("TestCookie", $value);
+setcookie("TestCookie", $value,time()+3600);  /*有效期为一小时 */
+setcookie("TestCookie", $value,time()+3600, "/~rasmus/", ".utoronto.ca", 1); 
+
+3.smarty的原理
+smarty是个模板引擎，最显著的地方就是有可以把模板缓存起来。 
+
+一般模板来说，都是做一个静态页面，然后在里面把一些动态的部分用一切分隔符切开，然后在PHP里打开这个模板文件，把分隔符里面的值替换掉，然后输出来，你可以看下PHPLib里面的template部分。 
+而smarty设定了缓存参数以后，第一运行时候会把模板打开，在php替换里面值的时候把读取的html和php部分重新生成一个临时的php文件，这样就省去了每次打开都重新读取html了。如果修改了模板，只要重新刷下就行了。 
+
+4.php遍历文件夹函数
+function loaddir($dirname){
+if($handle=opendir($dirname)){
+   while(false!==($files=readdir($handle))){
+    if($files!="."&&$files!=".."){
+     if(is_file($dirname.'/'.$files)){
+      echo $dirname.'/'.$files.'<br>';
+     }
+     if(is_dir($dirname."/".$files)){
+      loaddir($dirname."/".$files);
+     }
+    }
+   }
+}
+} 
